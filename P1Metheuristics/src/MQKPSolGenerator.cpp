@@ -16,7 +16,10 @@ void MQKPSolGenerator::genRandomSol(MQKPInstance &instance, MQKPSolution &soluti
 	int numKnapsacks = instance.getNumKnapsacks();
 
 	for (int i = 0; i < numObjs; i++){
-		int randomKnapsack = rand() % numKnapsacks;  //TODO Cambiar para seleccionar una de las mochilas disponibles
+		// Se generan identificadores de mochila entre 0 y el número de mochilas incluido
+		// El valor 0 se guarda para elementos no guardados en una mochila
+
+		int randomKnapsack = rand() % (numKnapsacks + 1);  //TODO Cambiar para seleccionar una de las mochilas disponibles
 		solution.putObjectIn(i, randomKnapsack);
 	}
 }

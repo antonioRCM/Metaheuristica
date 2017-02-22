@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../src/MQKPSolGenerator.cpp \
 ../src/MQKPSolution.cpp \
 ../src/Timer.cpp \
+../src/funciones.cpp \
 ../src/main.cpp \
 ../src/seeds.cpp 
 
@@ -18,6 +19,7 @@ OBJS += \
 ./src/MQKPSolGenerator.o \
 ./src/MQKPSolution.o \
 ./src/Timer.o \
+./src/funciones.o \
 ./src/main.o \
 ./src/seeds.o 
 
@@ -27,6 +29,7 @@ CPP_DEPS += \
 ./src/MQKPSolGenerator.d \
 ./src/MQKPSolution.d \
 ./src/Timer.d \
+./src/funciones.d \
 ./src/main.d \
 ./src/seeds.d 
 

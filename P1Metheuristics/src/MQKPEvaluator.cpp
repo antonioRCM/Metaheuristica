@@ -13,7 +13,7 @@
 double MQKPEvaluator::computeFitness(MQKPInstance &instance, MQKPSolution &solution){
 
 	double fitness = 0;
-
+	 double max_capacity_violation = instance.getMaxCapacityViolation(solution);
 	/*
 	 * TODO Calcular el fitness de la solución de la siguiente forma
 	 *   1. Obtener la máxima violación de las capacidades de las mochilas invocando la función de arriba
@@ -21,6 +21,11 @@ double MQKPEvaluator::computeFitness(MQKPInstance &instance, MQKPSolution &solut
 	 *   3. Si no, devolvemos la suma de los beneficios individuales y cuadráticos invocando a la función de arriba
 	 */
 
+	if (max_capacity_violation > 0) {
+		fitness =  -1 * max_capacity_violation;
+	} else {
+		fitness =  instance.getSumProfits(solution);
+	}
 
 	return fitness;
 }
