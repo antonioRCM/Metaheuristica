@@ -11,7 +11,7 @@
 
 //MQKPInstance::MQKPInstance(int numMochilas, int numObjetos, vector<vector<double> > beneficios, vector<double> pesos, vector<double> capacidades) {
 MQKPInstance::MQKPInstance() {
-	_numKnapsacks = 5;
+	_numKnapsacks = 3;
 	_numObjs = 0;
 	//setNumKnapsacks(5);
 	//setNumObjs(5);
@@ -93,6 +93,7 @@ double MQKPInstance::getMaxCapacityViolation(MQKPSolution &solution) {
 		 * 2. Actualizar maxCapacityViolation en su caso
 		 */
 		localCapacityViolation = sumWeights[j] - this->_capacities[j];
+		//localCapacityViolation = this->_capacities[j] - sumWeights[j];
 		if(localCapacityViolation > maxCapacityViolation)
 			maxCapacityViolation = localCapacityViolation;
 
@@ -112,8 +113,8 @@ double MQKPInstance::getSumProfits(MQKPSolution &solution) {
 	 * Todo par de objetos incluidos en la misma mochila (y > 0) debe sumar su beneficio conjunto. IMPORTANTE, sumar los pares (i,j) sólo una vez, es decir, si se suma (i, j), no se debe sumar (j, i)
 	 */
 
-	for(int i = 0; i < this->getNumKnapsacks(); i++) {
-		for(int j = i; j < this->getNumKnapsacks(); j++) {
+	for(int i = 0; i < this->getNumObjs(); i++) {
+		for(int j = i; j < this->getNumObjs(); j++) {
 
 			if((solution.whereIsObject(i) == solution.whereIsObject(j)) and (solution.whereIsObject(i)>0))
 				sumProfits += _profits[i][j];
