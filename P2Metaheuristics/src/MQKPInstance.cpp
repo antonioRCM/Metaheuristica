@@ -78,8 +78,8 @@ double MQKPInstance::getSumProfits(MQKPSolution &solution) {
 	double sumProfits = 0.;
 
 	/* Doble bucle para cada par de objetos
-	 * Todo objeto incluido en alguna mochila (> 0) debe sumar su beneficio individual
-	 * Todo par de objetos incluidos en la misma mochila (y > 0) debe sumar su beneficio conjunto. IMPORTANTE, sumar los pares (i,j) sólo una vez, es decir, si se suma (i, j), no se debe sumar (j, i)
+	 * Cada objeto incluido en alguna mochila (> 0) debe sumar su beneficio individual
+	 * Cada par de objetos incluidos en la misma mochila (y > 0) debe sumar su beneficio conjunto. IMPORTANTE, sumar los pares (i,j) sólo una vez, es decir, si se suma (i, j), no se debe sumar (j, i)
 	 */
 	int i, j;
 	for(i=0; i<getNumObjs(); i++)
@@ -212,7 +212,26 @@ double MQKPInstance::getProfit(int o1, int o2){
 
 void MQKPInstance::randomPermutation(int size, vector<int>& perm) {
 
-	/** TODO
+	srand(time(NULL));
+
+	/* *
+	 * Vaciamos el vector.
+	 */
+	perm.clear();
+
+	/* *
+	 * Rellenamos la permutación identidad.
+	 */
+	for(int i=0; i<size; i++)
+		perm[i] = i;
+
+	/* *
+	 * Permutación aleatoria.
+	 */
+	for(int i=0; i<size; i++)
+		perm[i] = rand()%(size+1);
+
+	/** HECHO
 	 * 1. Vacía el vector perm
 	 * 2. Llénalo con la permutación identidad
 	 * 3. Recórrelo intercambiando cada elemento con otro escogido de forma aleatoria.
@@ -224,22 +243,41 @@ double MQKPInstance::getDeltaSumProfits(MQKPSolution& solution, int indexObject,
 
 	double deltaSumProfits = 0;
 
-	/* TODO
+	/* HECHO
 	 * Si el objeto estaba en una mochila, resta a deltaSumProfits su beneficio más el beneficio
 	 * conjunto con cualquier otro objeto que estuviese en esa misma mochila
 	 */
 
-	/* TODO Si el objeto se va a insertar en alguna mochila, suma a deltaSumProfits su beneficio más el beneficio
+	/* HECHO Si el objeto se va a insertar en alguna mochila, suma a deltaSumProfits su beneficio más el beneficio
 	 * conjunto con cualquier otro objeto que ya esté en dicha mochila
 	 */
 
+	int oldknapsack = solution.whereIsObject(indexObject);
+	if(oldknapsack != 0){
+		deltaSumProfits = deltaSumProfits - getProfit(indexObject);
+		for(int i=0;i<_numObjs;i++){
+			if(oldknapsack == solution.whereIsObject(i)){
+			deltaSumProfits = deltaSumProfits - getProfit(indexObject,i);
+			}
+		}
+	}
+
+	if(indexKnapsack != 0){
+		deltaSumProfits = deltaSumProfits + getProfit(indexObject);
+		for(int i=0;i<_numObjs;i++){
+			if(indexKnapsack == solution.whereIsObject(i)){
+			deltaSumProfits = deltaSumProfits + getProfit(indexObject,i);
+			}
+		}
+	}
 	return deltaSumProfits;
 }
+
 
 double MQKPInstance::getDeltaMaxCapacityViolation(MQKPSolution& solution,
 		int indexObject, int indexKnapsack) {
 
-	/** TODO
+	/** HECHO
 	 * 1. Obten la mochila donde está el objeto
 	 * 2. Obten la máxima violación actual de la solución
 	 * 3. Asigna el objeto a la nueva mochila en solución
@@ -247,4 +285,16 @@ double MQKPInstance::getDeltaMaxCapacityViolation(MQKPSolution& solution,
 	 * 5. Deshaz el cambio anterior, volviendo a poner el objeto en la mochila en la que estaba
 	 * 6. Devuelve la diferencia (nueva violación - violación actual)
 	 */
+	// Se guarda la mochila actual del objeto para poder restablecerla luego
+	int oldKnapsack = solution.whereIsObject(indexObject);
+	double currentMaxViolation = this->getMaxCapacityViolation(solution);
+
+	// Cambiamos el objeto de mochila y obtenemos la nueva violación máxima
+	solution.putObjectIn(indexObject, indexKnapsack);
+	double newMaxViolation = this->getMaxCapacityViolation(solution);
+
+	// Devolvemos el objeto a su mochila anterior
+	solution.putObjectIn(indexObject, oldKnapsack);
+
+	return newMaxViolation - currentMaxViolation;
 }

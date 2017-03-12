@@ -41,7 +41,7 @@ double MQKPEvaluator::computeDeltaFitness(MQKPInstance& instance,
 	_numEvaluations++;
 
 	/**
-	 * TODO
+	 * HECHO
 	 * Dado que el fitness depende de si se violan las capacidades de alguna mochila o no,
 	 * deben calcularse las violaciones actuales y las posibles nuevas, además del posible
 	 * cambio en la suma de beneficios
@@ -59,6 +59,26 @@ double MQKPEvaluator::computeDeltaFitness(MQKPInstance& instance,
 	 * Si sólo la violación actual es positiva y la nueva es 0, devuelve la suma de newSumProfits + el negativo de deltaMaxCapacityViolation
 	 * Si sólo la violación nueva es positiva, devuelve el negativo de (la suma de la nueva violación + la nueva violación de capacidades)
 	 */
+	double actualMaxViolation = instance.getMaxCapacityViolation(solution);
+	double deltaMaxCapacityViolation = instance.getDeltaMaxCapacityViolation(solution,indexObject,indexKnapsack);
+	double newMaxViolation = actualMaxViolation + deltaMaxCapacityViolation;
+	double actualSumProfits = instance.getSumProfits(solution);
+	double deltaSumProfits = instance.getDeltaSumProfits(solution,indexObject,indexKnapsack);
+	double sumProfits = actualSumProfits + deltaSumProfits;
+
+	if (actualMaxViolation > 0 && newMaxViolation > 0) {
+		return deltaMaxCapacityViolation * -1;
+
+	} else if (actualMaxViolation == 0 && newMaxViolation == 0) {
+		return deltaSumProfits;
+
+	} else if (actualMaxViolation > 0 && newMaxViolation == 0) {
+		return sumProfits - deltaMaxCapacityViolation;
+
+	} else {
+		// (actualMaxViolation > 0 && newMaxViolation > 0)
+		return -1 * (newMaxViolation + deltaMaxCapacityViolation);
+	}
 }
 
 void MQKPEvaluator::resetNumEvaluations() {

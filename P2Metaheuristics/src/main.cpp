@@ -31,7 +31,7 @@ extern unsigned int seeds[];
 
 /**
  * Función que realiza varias optimizaciones locales de soluciones aleatorias, durante MAX_SECONS_PER_RUN segundos, un máximo de MAX_SOLUTIONS_PER_RUN y un máximo de MAX_INITIAL_SOLUTIONS optimizaciones locales, para la instancia proporcionada
- * @param[out] currentResults vector donde se almacenarán los valores fitness de las soluciones que la búsqueda local va aceptando en todo momento.
+ * @param[out] currentResults vector donde se almacenarán los valores fitness de las soluciones que la búsqueda local va aceptando en cada momento.
  * @param[out] bestSoFarResults vector donde se almacenarán los mejores valores fitness generados hasta el momento
  * @param[in] instance Instancia del problema de la mochila cuadrática múltiple
  * @param[in] explorer Operador de exploración de vecindarios a utilizar
@@ -62,16 +62,20 @@ void runALSExperiment(vector<double> &currentResults,
 			numInitialSolutions < MAX_INITIAL_SOLUTIONS) {
 
 		/*
-		 * TODO Generar una nueva solución aleatoria en initialSolution
+		 * HECHO Generar una nueva solución aleatoria en initialSolution
 		 * e inicializa su fitness
 		 */
+		MQKPSolGenerator::genRandomSol(instance, initialSolution);
+		currentFitness = MQKPEvaluator::computeFitness(instance,
+				initialSolution);
+		initialSolution.setFitness(currentFitness);
 
 		currentResults.push_back(currentFitness);
 		bestSoFarResults.push_back(
 				max(bestSoFarResults.back(), currentFitness));
 
-		//TODO Invoca a MQKPLocalSearch::optimise para optimizar la solución
-
+		//HECHO Invoca a MQKPLocalSearch::optimise para optimizar la solución
+		ls.optimise(instance,explorer,initialSolution);
 
 		//Almacenar los resultados
 		vector<double> &resultsLS = ls.getResults();
@@ -103,8 +107,7 @@ void runExperiments(vector<vector<vector<double>*>*> &results, char **mainArgs,
 
 		//Leer la instancia y crear la estructuras de datos necesarias para guardar los resultados
 		MQKPInstance instance;
-		vector<vector<double>*>* resultsOnThisInstance = new vector<
-				vector<double>*>;
+		vector<vector<double>*>* resultsOnThisInstance = new vector<vector<double>*>;
 		results.push_back(resultsOnThisInstance);
 		char *instanceName = mainArgs[iInstance];
 		unsigned int numKnapsacks = atoi(mainArgs[iInstance + 1]);
@@ -228,7 +231,7 @@ int main(int argc, char **argv) {
 			}
 			indexColumn++;
 
-			if (allTheResults.at(iInstance)->at(0)->size() > iIteration){
+			if (allTheResults.at(iInstance)->at(1)->size() > iIteration){
 				allResultsPrinted = false;
 				cout << allTheResults.at(iInstance)->at(1)->at(iIteration) << "\t";
 				lastResults[indexColumn] = allTheResults.at(iInstance)->at(1)->at(iIteration);

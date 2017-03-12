@@ -25,7 +25,7 @@ void MQKPLocalSearch::optimise(MQKPInstance& instance,
 	_results.push_back(solution.getFitness());
 	MQKPObjectAssignmentOperation operation;
 
-	/** TODO
+	/** HECHO
 	 * 1. Aplica una vez la exploración del vecindario y almacena si se ha conseguido o no mejorar la solución
 	 *
 	 * 2. Mientras se haya conseguido mejorar la solución
@@ -33,5 +33,12 @@ void MQKPLocalSearch::optimise(MQKPInstance& instance,
 	 *   b. Almacena en _results el nuevo fitness de la solución
 	 *   c. Aplica una nueva exploración del vecindario
 	 */
-
+	/////*****!!!Dilema con la funcion de explorer y ultimo parametro
+	bool ok=false;
+	ok=explorer.findOperation(instance,solution,operation);
+	while(ok){
+		operation.apply(solution);
+		setResults(solution.getFitness());
+		ok=explorer.findOperation(instance,solution,operation);
+	}
 }

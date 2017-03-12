@@ -50,6 +50,8 @@ public:
 	vector<double>& getResults() {
 		return _results;
 	}
+
+	void setResults(double results) { _results.push_back(results); }
 };
 
 

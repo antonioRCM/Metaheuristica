@@ -18,15 +18,20 @@ MQKPObjectAssignmentOperation::~MQKPObjectAssignmentOperation() {
 }
 
 void MQKPObjectAssignmentOperation::apply(MQKPSolution& solution) {
-	/* TODO
+	/* HECHO
 	 * 1. Asigna el objeto de índice _indexObj a la mochila _indexKnapsack en solution
 	 * 2. Actualiza el fitness de solution sumándole _deltaFitness
 	 */
+	solution.putObjectIn(_indexObj,_indexKnapsack);
+	solution.setFitness(solution.getFitness()+_deltaFitness);
 }
 
 void MQKPObjectAssignmentOperation::setValues(int indexObject,
 		int indexKnapsack, double deltaFitness) {
-	/* TODO
+	/* HECHO
 	 * Guarda los valores pasados como argumentos en las variables miembro
 	 */
+	_indexKnapsack = indexKnapsack;
+	_indexObj = indexObject;
+	_deltaFitness = deltaFitness;
 }

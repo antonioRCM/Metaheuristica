@@ -18,9 +18,12 @@ class MQKPObjectAssignmentOperation : public MQKPChangeOperation {
 
 protected:
 	/*
-	 * TODO
+	 * HECHO
 	 * Crea las variables miembro de la clase según lo indicado en el guión de prácticas (_indexObj, _indexKnapsack, _deltaFitness)
 	 */
+	int _indexKnapsack;
+	int _indexObj;
+	int _deltaFitness;
 
 public:
 

@@ -25,11 +25,12 @@ bool MQKPSimpleFirstImprovementNO::findOperation(MQKPInstance &instance, MQKPSol
 	//Crear una permutación de los índices de los objetos e inicializar algunas variables
 	vector<int> perm;
 	int numObjs = instance.getNumObjs();
+	perm.resize(numObjs);
 	int numKnapsacks = instance.getNumKnapsacks();
 	MQKPInstance::randomPermutation(numObjs, perm);
 
-	/* TODO
-	 * 1. Para todo objeto del problema (accediendo en el orden indicado en perm)
+	/* HECHO
+	 * 1. Para cada objeto del problema (accediendo en el orden indicado en perm)
 	 *   a. Para toda mochila del problema (Nota: no te olvides de ninguna)
 	 *     i. Obtener el deltaFitness de asignar dicho objeto a dicha mochila en solution
 	 *
@@ -40,6 +41,23 @@ bool MQKPSimpleFirstImprovementNO::findOperation(MQKPInstance &instance, MQKPSol
 	 * 2. Si se llega a este punto, no se encontró ningún deltaPositivo y se devuelve false
 	 *
 	 */
+
+	// Probamos con todos los objetos
+	for (int indexObj = 0; (size_t)indexObj < perm.size(); indexObj++) {
+
+		// Probamos el objeto en todas las mochilas, la primera tiene id 1
+		for (int indexKnapsack = 1; indexKnapsack < numKnapsacks+1; indexKnapsack++) {
+
+			double deltaFitness = MQKPEvaluator::computeDeltaFitness(instance, solution, perm[indexObj], indexKnapsack);
+			if (deltaFitness > 0) {
+				oaOperation->setValues(indexObj, indexKnapsack, deltaFitness);
+				return true;
+			}
+		}
+	}
+
+	// Si llega aquí no se han encontrado soluciones mejores a la actual
+	return false;
 }
 
 
