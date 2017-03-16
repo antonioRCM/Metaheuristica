@@ -1,2 +1,5 @@
+# Ficheros a ignorar
 *.o
 *.d
+
+# Directorios a ignorar

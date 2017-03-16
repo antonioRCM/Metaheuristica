@@ -12,9 +12,6 @@
 #include <MQKPNeighExplorer.h>
 #include <MQKPObjectAssignmentOperation.h>
 
-#include <iostream>
-using namespace std;
-
 MQKPLocalSearch::MQKPLocalSearch() {
 }
 
@@ -36,14 +33,12 @@ void MQKPLocalSearch::optimise(MQKPInstance& instance,
 	 *   b. Almacena en _results el nuevo fitness de la solución
 	 *   c. Aplica una nueva exploración del vecindario
 	 */
-
-	bool ok;
+	/////*****!!!Dilema con la funcion de explorer y ultimo parametro
+	bool ok=false;
 	ok=explorer.findOperation(instance,solution,operation);
-
 	while(ok){
 		operation.apply(solution);
 		setResults(solution.getFitness());
 		ok=explorer.findOperation(instance,solution,operation);
-
 	}
 }

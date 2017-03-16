@@ -27,6 +27,7 @@ bool MQKPSimpleBestImprovementNO::findOperation(MQKPInstance& instance,
 	//Crear una permutación de los índices de los objetos e inicializar algunas variables
 	vector<int> perm;
 	int numObjs = instance.getNumObjs();
+	perm.resize(numObjs);
 	MQKPInstance::randomPermutation(numObjs, perm);
 	int numKnapsacks = instance.getNumKnapsacks();
 	bool initialised = false;
@@ -48,12 +49,12 @@ bool MQKPSimpleBestImprovementNO::findOperation(MQKPInstance& instance,
 	double sum=0.0;
 
 	for(int i=0;i<(int)perm.size();i++){
-		for(int j=1;j<=numKnapsacks;j++){
-			sum = MQKPEvaluator::computeDeltaFitness(instance, solution, perm[i], j);
-		if(sum>bestDeltaFitness  || initialised == false){
+		for(int j=0;j<(numKnapsacks+1);j++){
+		sum=instance.getDeltaSumProfits(solution,perm[i],j);
+		if(sum>bestDeltaFitness || initialised == false){
 			initialised = true;
 			bestDeltaFitness=sum;
-			oaOperation->setValues(perm[i],j,bestDeltaFitness);
+			oaOperation->setValues(perm[i],j,sum);
 		}
 		}
 	}

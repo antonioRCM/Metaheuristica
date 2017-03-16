@@ -25,6 +25,7 @@ bool MQKPSimpleFirstImprovementNO::findOperation(MQKPInstance &instance, MQKPSol
 	//Crear una permutación de los índices de los objetos e inicializar algunas variables
 	vector<int> perm;
 	int numObjs = instance.getNumObjs();
+	perm.resize(numObjs);
 	int numKnapsacks = instance.getNumKnapsacks();
 	MQKPInstance::randomPermutation(numObjs, perm);
 
@@ -42,14 +43,14 @@ bool MQKPSimpleFirstImprovementNO::findOperation(MQKPInstance &instance, MQKPSol
 	 */
 
 	// Probamos con todos los objetos
-	for (int indexObj = 0; indexObj < (int)perm.size(); indexObj++) {
+	for (int indexObj = 0; (size_t)indexObj < perm.size(); indexObj++) {
 
-
-		for (int indexKnapsack = 1; indexKnapsack <= numKnapsacks; indexKnapsack++) {
+		// Probamos el objeto en todas las mochilas, la primera tiene id 1
+		for (int indexKnapsack = 1; indexKnapsack < numKnapsacks+1; indexKnapsack++) {
 
 			double deltaFitness = MQKPEvaluator::computeDeltaFitness(instance, solution, perm[indexObj], indexKnapsack);
 			if (deltaFitness > 0) {
-				oaOperation->setValues(perm[indexObj], indexKnapsack, deltaFitness);
+				oaOperation->setValues(indexObj, indexKnapsack, deltaFitness);
 				return true;
 			}
 		}

@@ -212,22 +212,30 @@ double MQKPInstance::getProfit(int o1, int o2){
 
 void MQKPInstance::randomPermutation(int size, vector<int>& perm) {
 
+	srand(time(NULL));
+
+	/* *
+	 * Vaciamos el vector.
+	 */
+	perm.clear();
+
+	/* *
+	 * Rellenamos la permutación identidad.
+	 */
+	for(int i=0; i<size; i++)
+		perm[i] = i;
+
+	/* *
+	 * Permutación aleatoria.
+	 */
+	for(int i=0; i<size; i++)
+		perm[i] = rand()%(size+1);
+
 	/** HECHO
 	 * 1. Vacía el vector perm
 	 * 2. Llénalo con la permutación identidad
 	 * 3. Recórrelo intercambiando cada elemento con otro escogido de forma aleatoria.
 	 */
-
-	int aux,pos;
-	perm.clear();
-	for(int i=0;i<size;i++){
-		perm.push_back(i);
-	}
-	for(int i=0;i<size;i++){
-		pos=rand()%size;
-		aux=perm[pos];
-		perm[pos]=perm[i];
-		perm[i]=aux;}
 }
 
 double MQKPInstance::getDeltaSumProfits(MQKPSolution& solution, int indexObject,
@@ -248,7 +256,7 @@ double MQKPInstance::getDeltaSumProfits(MQKPSolution& solution, int indexObject,
 	if(oldknapsack != 0){
 		deltaSumProfits = deltaSumProfits - getProfit(indexObject);
 		for(int i=0;i<_numObjs;i++){
-			if(i != indexObject && oldknapsack == solution.whereIsObject(i)){
+			if(oldknapsack == solution.whereIsObject(i)){
 			deltaSumProfits = deltaSumProfits - getProfit(indexObject,i);
 			}
 		}
@@ -257,7 +265,7 @@ double MQKPInstance::getDeltaSumProfits(MQKPSolution& solution, int indexObject,
 	if(indexKnapsack != 0){
 		deltaSumProfits = deltaSumProfits + getProfit(indexObject);
 		for(int i=0;i<_numObjs;i++){
-			if(i != indexObject && indexKnapsack == solution.whereIsObject(i)){
+			if(indexKnapsack == solution.whereIsObject(i)){
 			deltaSumProfits = deltaSumProfits + getProfit(indexObject,i);
 			}
 		}

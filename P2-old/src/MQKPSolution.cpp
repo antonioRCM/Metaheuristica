@@ -60,7 +60,7 @@ void MQKPSolution::copy(MQKPSolution& solution) {
 	this->setFitness( solution.getFitness() );
 
 	// Copia del vector solución
-	_sol = new int(this->_numObjs);
+	_sol = new int(_numObjs);
 	for (int i = 0; i < this->_numObjs; i++)  {
 		_sol[i] = solution.whereIsObject(i);
 	}

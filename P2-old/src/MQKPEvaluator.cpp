@@ -72,10 +72,11 @@ double MQKPEvaluator::computeDeltaFitness(MQKPInstance& instance,
 	} else if (actualMaxViolation == 0 && newMaxViolation == 0) {
 		return deltaSumProfits;
 
-	} else if (actualMaxViolation > 0) {
+	} else if (actualMaxViolation > 0 && newMaxViolation == 0) {
 		return sumProfits - deltaMaxCapacityViolation;
 
-	} else if(newMaxViolation > 0){
+	} else {
+		// (actualMaxViolation > 0 && newMaxViolation > 0)
 		return -1 * (newMaxViolation + deltaMaxCapacityViolation);
 	}
 }

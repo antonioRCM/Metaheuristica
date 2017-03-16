@@ -62,7 +62,7 @@ void runALSExperiment(vector<double> &currentResults,
 			numInitialSolutions < MAX_INITIAL_SOLUTIONS) {
 
 		/*
-		 * Generar una nueva solución aleatoria en initialSolution
+		 * HECHO Generar una nueva solución aleatoria en initialSolution
 		 * e inicializa su fitness
 		 */
 		MQKPSolGenerator::genRandomSol(instance, initialSolution);
@@ -74,7 +74,7 @@ void runALSExperiment(vector<double> &currentResults,
 		bestSoFarResults.push_back(
 				max(bestSoFarResults.back(), currentFitness));
 
-		//Invoca a MQKPLocalSearch::optimise para optimizar la solución
+		//HECHO Invoca a MQKPLocalSearch::optimise para optimizar la solución
 		ls.optimise(instance,explorer,initialSolution);
 
 		//Almacenar los resultados
@@ -107,8 +107,7 @@ void runExperiments(vector<vector<vector<double>*>*> &results, char **mainArgs,
 
 		//Leer la instancia y crear la estructuras de datos necesarias para guardar los resultados
 		MQKPInstance instance;
-		vector<vector<double>*>* resultsOnThisInstance = new vector<
-				vector<double>*>;
+		vector<vector<double>*>* resultsOnThisInstance = new vector<vector<double>*>;
 		results.push_back(resultsOnThisInstance);
 		char *instanceName = mainArgs[iInstance];
 		unsigned int numKnapsacks = atoi(mainArgs[iInstance + 1]);
@@ -232,7 +231,7 @@ int main(int argc, char **argv) {
 			}
 			indexColumn++;
 
-			if (allTheResults.at(iInstance)->at(0)->size() > iIteration){
+			if (allTheResults.at(iInstance)->at(1)->size() > iIteration){
 				allResultsPrinted = false;
 				cout << allTheResults.at(iInstance)->at(1)->at(iIteration) << "\t";
 				lastResults[indexColumn] = allTheResults.at(iInstance)->at(1)->at(iIteration);

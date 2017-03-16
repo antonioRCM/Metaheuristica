@@ -23,7 +23,7 @@ protected:
 	 */
 	int _indexKnapsack;
 	int _indexObj;
-	double _deltaFitness;
+	int _deltaFitness;
 
 public:
 
