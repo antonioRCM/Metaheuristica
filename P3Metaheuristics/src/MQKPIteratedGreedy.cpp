@@ -46,7 +46,7 @@ void MQKPIteratedGreedy::chooseOperation(
 				int indexKnapsack = j;
 
 				double deltaFitness = MQKPEvaluator::computeDeltaFitness(*_instance, *_sol, indexObj, indexKnapsack);
-				double density = deltaFitness/2;// TODO Corregir density
+				double density = deltaFitness/(_instance->getWeight(indexObj));
 
 				if (density > bestDensity || initialisedBestDensity == false) {
 					initialisedBestDensity = true;
