@@ -32,23 +32,23 @@ void MQKPGrasp::chooseOperation(MQKPObjectAssignmentOperation& operation) {
 	unsigned numTries = ((unsigned)(numObjs * numKnapsacks * _alpha));
 
 	/**
-	 * TODO
+	 * hecho
 	 * Generar alternativas de objeto y mochila aleatorias (no se considera la mochila 0) y quedarse con la alterantiva de mejor densidad
 	 */
 	for (unsigned i = 0; i < numTries; i++) {
-		int indexObj = ...;
-		int indexKnapsack = ...;
+		int indexObj = rand()%numObjs;
+		int indexKnapsack = rand()%numKnapsacks+1;
 
-		double deltaFitness = MQKPEvaluator::computeDel...; //TODO obtener la mejora en fitness de dicha operación
-		double density = ...; //TODO calcular la densidad de dicha operación como la diferencia en fitness dividido por el peso del objeto
+		double deltaFitness = MQKPEvaluator::computeDeltaFitness(*_instance,*_sol,indexObj,indexKnapsack); //hecho obtener la mejora en fitness de dicha operación
+		double density = deltaFitness/_instance->getWeight(indexObj); //hecho calcular la densidad de dicha operación como la diferencia en fitness dividido por el peso del objeto
 
-		//TODO actualizar si resulta ser la mejor
-		if (... > ... || initialisedBestDensity == false) {
+		//hecho actualizar si resulta ser la mejor
+		if (bestDensity < density || initialisedBestDensity == false) {
 			initialisedBestDensity = true;
-			bestDensity = ...
-			bestObj = ...
-			bestKnapsack = ...
-			bestDeltaFitness = ...
+			bestDensity = density;
+			bestObj = indexObj;
+			bestKnapsack = indexKnapsack;
+			bestDeltaFitness = deltaFitness;
 		}
 	}
 
@@ -59,14 +59,14 @@ void MQKPGrasp::chooseOperation(MQKPObjectAssignmentOperation& operation) {
 void MQKPGrasp::buildInitialSolution() {
 
 	/**
-	 * TODO
+	 * hecho
 	 * Vaciar la solución _sol asignándole un fitness de 0 y poniendo todos los objetos en la mochila 0
 	 */
 	unsigned numObjs = _instance->getNumObjs();
 
-	_sol->setFitness(...);
+	_sol->setFitness(0);
 	for (unsigned i = 0; i < numObjs; i++) {
-		...
+		_sol->putObjectIn(i,0);
 	}
 
 	/** Seleccionar la primera operación */
@@ -74,14 +74,16 @@ void MQKPGrasp::buildInitialSolution() {
 	chooseOperation(operation);
 
 	/**
-	 * TODO
+	 * hecho
 	 * Mientras la operación tenga un incremento de fitness positivo, operation.getDeltaFitness(),
 	 *  1. aplicar la operación en _sol
 	 *  2. Almacenar el fitness de la solución en _result (para las gráficas)
 	 *  3. seleccionar una nueva operación
 	 */
 	while (operation.getDeltaFitness() > 0) {
-		...
+		operation.apply(*_sol);
+		_results.push_back(_sol->getFitness());
+		chooseOperation(operation);
 	}
 }
 
@@ -102,17 +104,17 @@ void MQKPGrasp::run(MQKPStopCondition& stopCondition) {
 	}
 
 	/**
-	 * TODO
+	 * hecho
 	 * Mientras no se alcance el criterio de parada
 	 *   1. Generar una solución inicial invocando al método correspondiente
 	 *   2. Almacenar el fitness de la solución en _results
 	 *   3. Optimizar _sol con la búsqueda local y el operador de vecindario de la metaheurística
 	 *   4. Actualizar la mejor solución
 	 */
-	while (...) {
-		bui...
+	while (stopCondition.reached() == false) {
+		buildInitialSolution();
 		_results.push_back(_sol->getFitness());
-		_ls.optimise...
+		_ls.optimise(*_instance,_no,*_sol);				//MARCADO
 
 		vector<double> &auxResults = _ls.getResults();
 

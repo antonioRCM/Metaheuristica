@@ -11,6 +11,9 @@
 
 #include "MQKPEvaluator.h"
 #include <Timer.h>
+#include <iostream>
+
+using namespace std;
 
 /**
  * Clase que define algunas condiciones de parada bastante comunes en las metaheurísticas, e informa del requerimiento de pararla cuando se cumple alguna de ellas
@@ -39,7 +42,7 @@ public:
 		_maxIterations = 0;
 		_maxTime = 0;
 		_numIterations = 0;
-		_time.reset(); //hecho resetear la variable _time
+		_time.reset(); //resetear la variable _time
 	}
 
 	/**
@@ -50,13 +53,17 @@ public:
 	virtual bool reached(){
 		bool result = false;
 
-		if (_maxEvaluations > 0 && MQKPEvaluator::getNumEvaluations() >= _maxEvaluations)
+		double numEvaluations = MQKPEvaluator::getNumEvaluations();
+		double elapsedTime = _time.elapsed_time(Timer::VIRTUAL);
+		unsigned numIterations = _numIterations;
+
+		if (_maxEvaluations > 0 && numEvaluations >= _maxEvaluations)
 			result = true;
 
-		if (_maxIterations > 0 && _numIterations >= _maxIterations)
+		if (_maxIterations > 0 && numIterations >= _maxIterations)
 			result = true;
 
-		if (_maxTime > 0 && _time.elapsed_time(Timer::VIRTUAL) >= _maxTime)
+		if (_maxTime > 0 && elapsedTime >= _maxTime)
 			result = true;
 
 		return result;
@@ -72,7 +79,7 @@ public:
 		_maxEvaluations = maxEvaluations;
 		_maxIterations = maxIterations;
 		_maxTime = maxTime;
-		_time.reset(); //hecho resetear la variable _time
+		_time.reset(); //resetear la variable _time
 	}
 
 	/**

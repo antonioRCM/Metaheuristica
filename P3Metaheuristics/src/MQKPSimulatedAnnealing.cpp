@@ -54,7 +54,7 @@ void MQKPSimulatedAnnealing::run(MQKPStopCondition& stopCondition) {
 	unsigned numIterations = 0;
 
 	/**
-	 * TODO
+	 * hecho
 	 * Mientras que no se alcance la condición de parada
 	 *   1. Generar aleatoriamente un objeto y una mochila (incluida la mochila 0)
 	 *   2. Calcular la diferencia en fitness de aplicar dicho cambio sobre _solution
@@ -62,12 +62,12 @@ void MQKPSimulatedAnnealing::run(MQKPStopCondition& stopCondition) {
 	 *   4. Actualizar la mejor solución hasta el momento.
 	 *   5. Si se llevan _itsPerAnnealing tras el último enfriamiento, entonces enfriar
 	 */
-	while (stopCondition.r...){
-		int indexObject = ...
-		int indexKnapsack = ...
-		double deltaFitness = MQKPEvaluator::computeDelta...;
+	while (stopCondition.reached() == false){
+		int indexObject = rand()%numObjs;
+		int indexKnapsack = rand()%(numKnapsacks+1);
+		double deltaFitness = MQKPEvaluator::computeDeltaFitness(*_instance,*_solution,indexObject,indexKnapsack);
 
-		if (...){
+		if (accept(deltaFitness)){
 			_solution->putObjectIn(indexObject, indexKnapsack);
 			_solution->setFitness(_solution->getFitness() + deltaFitness);
 
@@ -76,9 +76,9 @@ void MQKPSimulatedAnnealing::run(MQKPStopCondition& stopCondition) {
 			}
 		}
 		numIterations++;
-		_results.push_back(_solution->getFitness());
+		_results.push_back(_solution->getFitness());  
 
-		if (numIterations % ...){
+		if (numIterations % _itsPerAnnealing == 0 ){
 			_T *= _annealingFactor;
 		}
 
@@ -88,7 +88,7 @@ void MQKPSimulatedAnnealing::run(MQKPStopCondition& stopCondition) {
 
 bool MQKPSimulatedAnnealing::accept(double deltaFitness) {
 	/**
-	 * TODO
+	 * hecho
 	 * .Calcular la probabilidad de aceptar el cambio, que será la exponencial de (la diferencia de fitness dividido por la temperatura)
 	 *
 	 * .Si el problema es de minimización, entonces un delta fitness negativo es bueno. Hay que modificar "un poco" la función de aceptación para producir una probabilidad de aceptación superior a 1
@@ -98,15 +98,19 @@ bool MQKPSimulatedAnnealing::accept(double deltaFitness) {
 	 *
 	 * (piensa qué ocurre cuando la diferencia de fitness es positiva o cuando es negativa)
 	 */
-	double auxDeltaFitness = ...
+	double auxDeltaFitness = deltaFitness;
 
 	if (MQKPEvaluator::isToBeMinimised()){
-		...
+		if(auxDeltaFitness<=0)
+			return true;
 	}
 
-	double prob = ...;
+	double prob = exp(auxDeltaFitness/_T);
 	double randSample = (((double)rand()) / RAND_MAX);
-	return (...);
+	if(randSample < prob){
+	return (true);
+	}
+	return false;
 }
 
 void MQKPSimulatedAnnealing::initialise(double initialProb, int numInitialEstimates, double annealingFactor, unsigned itsPerAnnealing, MQKPInstance &instance) {

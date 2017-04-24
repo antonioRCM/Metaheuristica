@@ -50,7 +50,7 @@ void MQKPTabuSearch::run(MQKPStopCondition& stopCondition) {
 	unsigned numIterations = 0;
 
 	/**
-	 * TODO
+	 * Hecho
 	 * Mientras no se alcance la condición de parada
 	 *  1. Generar una permutación de objetos
 	 *  2. Buscar la mejor operación no tabú de asignación de un objeto a una mochila (incluida la 0)
@@ -59,7 +59,7 @@ void MQKPTabuSearch::run(MQKPStopCondition& stopCondition) {
 	 *  5. Actualizar la mejor solución hasta el momento
 	 */
 
-	while (...) {
+	while (stopCondition.reached() == false) {
 
 		vector<int> perm;
 		MQKPInstance::randomPermutation(numObjs, perm);
@@ -72,39 +72,41 @@ void MQKPTabuSearch::run(MQKPStopCondition& stopCondition) {
 			unsigned indexObj = perm[i];
 
 			//Si el objeto no es tabú (utilizar _shortTermMem_aux.find)
-			if (...) {
+
+			if ( _shortTermMem_aux.end() == _shortTermMem_aux.find(indexObj)) {
 
 				//Probar todas las mochilas (incluida la 0) y elegir la mejor opción
-				for (unsigned j ...) {
+				for (unsigned j=0; j<=numKnapsacks; j++) {
 
 					//Saltarse el cambio que no hace nada
 					if (_solution->whereIsObject(indexObj) == ((int)j))
 						continue;
 
 					//Obtener la diferencia de fitness de aplicar dicha operación
-					double deltaFitness = MQKPEvaluator::computeDel....;
+					double deltaFitness = MQKPEvaluator::computeDeltaFitness(*_instance, *_solution, indexObj, j);
 
 					//Si la diferencia de fitness es la mejor hasta el momento, apuntarla para aplicarla después
 					if (deltaFitness > bestDeltaFitness
 							|| initialisedDeltaFitness == false) {
 						initialisedDeltaFitness = true;
-						bestDeltaFitness = ...;
-						bestOperation.setValues(...);
+						bestDeltaFitness = deltaFitness;
+						bestOperation.setValues(indexObj, j, deltaFitness);
 					}
 				}
 			}
 		}
 
-		//TODO Aplicar la operación y almacenarla en la memoria a corto plazo
-		bestOperation.apply...
-		_shortTermMem....
-		_shortTermMem_aux....
+		//Hecho Aplicar la operación y almacenarla en la memoria a corto plazo
+		bestOperation.apply(*_solution);
+		_shortTermMem.push(bestOperation.getObj());
+		_shortTermMem_aux.insert(bestOperation.getObj());
 
-		//TODO Si hay demasiados elementos en la memoria, según la tenencia tabú, eliminar el más antiguo
+		//hecho Si hay demasiados elementos en la memoria, según la tenencia tabú, eliminar el más antiguo
 		if (_shortTermMem.size() > _tabuTennure) {
-			unsigned value = _shortTermMem....
-			_shortTermMem....
-			_shortTermMem_aux.erase(...);
+			unsigned value = _shortTermMem.front();
+			_shortTermMem.pop();
+			_shortTermMem_aux.erase(value);
+
 		}
 
 		//Actualizar la mejor solución

@@ -33,7 +33,7 @@ bool MQKPSimpleBestImprovementNO::findOperation(MQKPInstance& instance,
 	double bestDeltaFitness = 0;
 
 	/*
-	 * 1. Para todo objeto del problema (accediendo en el orden indicado en perm)
+	 * 1. Para tod objeto del problema (accediendo en el orden indicado en perm)
 	 *   a. Para toda mochila del problema
 	 *     i. Obtener el deltaFitness de asignar dicho objeto a dicha mochila en solution
 	 *

@@ -44,7 +44,7 @@ void runASAExperiment(vector<double> &currentResults,
 	MQKPSimulatedAnnealing sa;
 	MQKPStopCondition stopCond;
 	MQKPEvaluator::resetNumEvaluations();
-	sa.initialise(0.9, 10, 0.9999, 50, instance);
+	sa.initialise(0.9, 10, 0.9999, 10, instance); //cambiado el segundo 10 antes ponia un 50 lo digo el de practicas
 	stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
 
 	//Generar solución aleatoria

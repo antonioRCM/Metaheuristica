@@ -78,8 +78,8 @@ double MQKPInstance::getSumProfits(MQKPSolution &solution) {
 	double sumProfits = 0.;
 
 	/* Doble bucle para cada par de objetos
-	 * Tod objeto incluido en alguna mochila (> 0) debe sumar su beneficio individual
-	 * Tod par de objetos incluidos en la misma mochila (y > 0) debe sumar su beneficio conjunto. IMPORTANTE, sumar los pares (i,j) sólo una vez, es decir, si se suma (i, j), no se debe sumar (j, i)
+	 * Todo objeto incluido en alguna mochila (> 0) debe sumar su beneficio individual
+	 * Todo par de objetos incluidos en la misma mochila (y > 0) debe sumar su beneficio conjunto. IMPORTANTE, sumar los pares (i,j) sólo una vez, es decir, si se suma (i, j), no se debe sumar (j, i)
 	 */
 	int i, j;
 	for(i=0; i<getNumObjs(); i++)

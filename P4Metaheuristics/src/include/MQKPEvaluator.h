@@ -22,7 +22,7 @@ protected:
 	/**
 	 * Variable donde se contabiliza el número de soluciones que se evalúan a través de  computeFitness o computeDeltaFitness
 	 */
-	static unsigned _numEvaluations;
+	static double _numEvaluations;
 
 public:
 	/**
@@ -53,7 +53,7 @@ public:
 	/**
 	 * Función que devuelve el número de veces que se ha evaluado alguna solución
 	 */
-	static unsigned getNumEvaluations() {
+	static double getNumEvaluations() {
 		return _numEvaluations;
 	}
 
@@ -64,20 +64,10 @@ public:
 	 * @return Un valor positivo si el primer valor es mejor que el segundo, negativo en caso contrario, y 0 si son indistinguibles
 	 */
 	static double compare(double f1, double f2){
-		//hecho corregir lo que hay que devolver
-		if(f1 > f2){
-			return 1;
-		}else if(f2 > f1){
-			return -1;
-		}else{
-			return 0;
-		}
+		return (f1 - f2);
 	}
 
-	/**
-	 * Función que indica si el problema es de minimización o de maximización
-	 * @return Devuelve true si el problema es de minimización o false, si es de maximización
-	 */
+
 	static bool isToBeMinimised(){
 		return (compare(0,1) > 0);
 	}

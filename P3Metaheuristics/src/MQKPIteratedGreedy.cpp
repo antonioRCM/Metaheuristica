@@ -25,7 +25,7 @@ void MQKPIteratedGreedy::chooseOperation(
 	unsigned numKnapsacks = _instance->getNumKnapsacks();
 
 	/**
-	 * HECHO
+	 * Hecho
 	 * Recorrer todos los objetos que no están en ninguna mochila
 	 *   Recorrer todas las mochilas
 	 *     Calcular el delta del fitness de asignar dicho objeto a dicha mochila y la densidad
@@ -36,13 +36,11 @@ void MQKPIteratedGreedy::chooseOperation(
 
 		int indexObj = i;
 
-		// Este método devuelve cero si el elemento con índice indexObj no está en ninguna mochila
-		if (_sol->whereIsObject(indexObj) == 0) { //HECHO comprobar que no está en ninguna mochila
+		if (_sol->whereIsObject(indexObj) == 0) { //Hecho comprobar que no está en ninguna mochila
 
-			// Los índices de mochila van desde 1 hasta el número de mochilas
-			for (unsigned j = 1; j <= numKnapsacks; j++) { //HECHO para todas las mochilas disponibles (saltarse la 0)
+			for (unsigned j = 1; j <= numKnapsacks; j++) { //hecho para todas las mochilas disponibles (saltarse la 0)
 
-				//HECHO Calcular delta fitness, densidad como deltaFitness dividido por el peso, y actualizar la mejor opción
+				//hecho Calcular delta fitness, densidad como deltaFitness dividido por el peso, y actualizar la mejor opción
 				int indexKnapsack = j;
 
 				double deltaFitness = MQKPEvaluator::computeDeltaFitness(*_instance, *_sol, indexObj, indexKnapsack);
@@ -68,15 +66,15 @@ void MQKPIteratedGreedy::rebuild() {
 	MQKPObjectAssignmentOperation operation;
 	chooseOperation(operation);
 
-	/** HECHO
+	/** hecho
 	 * Mientras la operación tenga un incremento de fitness positivo, operation.getDeltaFitness(),
 	 *  1. aplicar la operación en _sol
-	 *  2. Almacenar el fitness de la solución en _results (para las gráficas)
+	 *  2. Almacenar el fitness de la solución en _result (para las gráficas)
 	 *  3. seleccionar una nueva operación
 	 */
 	while (operation.getDeltaFitness() > 0) {
 		operation.apply(*_sol);
-		_results.push_back(MQKPEvaluator::computeFitness(*_instance, *_sol));
+		_results.push_back(_sol->getFitness());
 		chooseOperation(operation);
 	}
 }
@@ -84,7 +82,7 @@ void MQKPIteratedGreedy::rebuild() {
 void MQKPIteratedGreedy::destroy() {
 
 	/**
-	 * HECHO
+	 * hecho
 	 * Recorrer los objetos y sacarlos de su mochila con probabilidad _alpha
 	 */
 
@@ -127,7 +125,7 @@ void MQKPIteratedGreedy::run(MQKPStopCondition& stopCondition) {
 		_bestSolution->copy(*_sol);
 
 	/**
-	 * HECHO
+	 * hecho
 	 * Mientras no se alcance la condición de parada
 	 *  1. Destruir parcialmente la solución
 	 *  2. Reconstruir la solución
@@ -144,6 +142,7 @@ void MQKPIteratedGreedy::run(MQKPStopCondition& stopCondition) {
 			_bestSolution->copy(*_sol); // Actualiza la mejor solución
 		else
 			_sol->copy(*_bestSolution); // Restaura la solución anterior
+
 
 		stopCondition.notifyIteration();
 	}
